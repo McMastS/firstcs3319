@@ -3,10 +3,10 @@ DROP DATABASE IF EXISTS smcmast2assign2db;
 CREATE DATABASE smcmast2assign2db;
 use smcmast2assign2db;
 
-GRANT USAGE *.* TO 'ta'@'localhost';
+GRANT USAGE ON *.* TO 'ta'@'localhost';
 DROP USER 'ta'@'localhost';
 CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
-GRANT ALL PRIVILEGES ON smcmast2assign2db.* TO 'ta'@'localhost';
+GRANT ALL PRIVILEGES ON yourwesternuseridassign2db.* TO 'ta'@'localhost';
 FLUSH PRIVILEGES;
 
 SHOW TABLES;
