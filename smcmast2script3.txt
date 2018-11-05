@@ -23,26 +23,26 @@ SELECT SUM(quantity) AS "Homer's Total Purchases" FROM purchase
 SELECT c.firstName, c.lastName, SUM(pur.quantity) AS "Total Quantity" FROM customer AS c
     INNER JOIN purchase AS pur ON c.customerID = pur.customerID
     GROUP BY c.firstName, c.lastName;
-    
 -- Query 10
 SELECT description, quantity FROM product WHERE productID NOT IN (SELECT productID FROM purchase);
--- Query 11
-SELECT pro.description, pur.quantity FROM product AS pro 
-    INNER JOIN purchase AS pur ON pur.customerID = pro.productID  
-    INNER JOIN customer AS c ON pur.customerID = c.customerID
-    WHERE c.customerID NOT IN (SELECT customerID FROM customer WHERE firstname = "Fred" AND lastname = "Flintstone");
-
-SELECT pro.description, pur.quantity FROM product AS pro
-    INNER JOIN purchase AS pur ON pro.productID = pur.productID
-    
+-- Query 11 : wasn't sure if this is supposed to be quantity on hand or quantity purchased, so i did quantity on hand
+SELECT description, quantity FROM product
+    WHERE productID NOT IN 
+    (SELECT productID FROM purchase WHERE customerID IN 
+        (SELECT customerID FROM customer WHERE firstname = "Fred" AND lastname = "Flintstone"));  
 -- Query 12
 SELECT a.firstname AS agentfirst, a.lastname AS agentlast, c.firstname AS customerfirst, c.lastname AS customerlast FROM agent AS a
     INNER JOIN customer AS c ON c.agentID = a.agentID
     WHERE a.city = c.city;
 -- Query 13
-SELECT SUM(quantity) AS KneePadQuantity FROM purchase WHERE productID = 78;
+SELECT SUM(quantity) AS "Total Knee Pads Sold" FROM purchase WHERE productID = 78;
 -- Query 14
-SELECT pro.description FROM product AS pro
+SELECT pro.description AS "Over 3 Customers" FROM product AS pro
     INNER JOIN purchase AS pur ON pro.productID = pur.productID
-    INNER JOIN customer AS c ON pur.customerID = pur.customerID
-    WHERE sum_customer > 3 IN (SELECT COUNT(customerID) AS sum_customer FROM purchase);
+    INNER JOIN customer AS c ON pur.customerID = c.customerID
+    GROUP BY pro.description
+    HAVING COUNT(DISTINCT pur.customerID) > 3;
+-- Query 15
+SELECT a.firstname, a.lastname FROM agent AS a
+    INNER JOIN customer AS c ON a.agentID = c.agentID
+    WHERE c.customerID IN (SELECT customerID FROM purchase WHERE productID = 78);
