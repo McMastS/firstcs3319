@@ -1,0 +1,32 @@
+use smcmast2assign2db;
+
+-- Show data in all tables
+SELECT * FROM customer;
+SELECT * FROM product;
+SELECT * FROM agent;
+SELECT * FROM purchase;
+
+-- Create view and prove functionality
+CREATE VIEW customerInfo AS
+SELECT c.firstname, c.lastname, pro.description, pur.quantity, pro.cost, pro.cost * pur.quantity AS totalProductCost FROM customer AS c
+    INNER JOIN purchase AS pur ON c.customerID = pur.customerID
+    INNER JOIN product AS pro ON pur.productID = pro.productID
+    ORDER BY c.lastname;
+
+SELECT * FROM customerInfo;
+
+SELECT * FROM customerInfo WHERE totalProductCost > 100;
+
+-- Deletion queries
+-- Should return row for "scooter"
+SELECT * FROM product WHERE productID = "01";
+DELETE FROM product WHERE productID = "01";
+-- Should return empty set
+SELECT * FROM product WHERE productID = "01";
+
+-- Agents will not delete if they have customers, as there exists a foreign key constraint in the customer table on agentID
+-- Only Hugh Grant is from Springfield at this point, and since he has customers, he will not be deleted
+-- If an agent didn't have customers, they could be deleted
+SELECT * FROM agent WHERE city = "Springfield";
+DELETE FROM agent WHERE city = "Springfield";
+SELECT * FROM agent WHERE city = "Springfield";
