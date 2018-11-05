@@ -1,4 +1,7 @@
+use smcmast2assign2db;
+
 LOAD DATA LOCAL INFILE 'product_data.txt' INTO TABLE smcmast2assign2db.product FIELDS TERMINATED BY ',';
+
 SELECT * FROM product;
 
 -- Product inserts
