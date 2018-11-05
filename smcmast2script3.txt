@@ -1,0 +1,48 @@
+use smcmast2assign2db;
+
+-- Query 1
+SELECT description FROM product;
+-- Query 2
+SELECT DISTINCT city FROM customer;
+-- Query 3
+SELECT * FROM agent ORDER BY city;
+-- Query 4
+SELECT firstname, lastname FROM customer WHERE city = "Springfield";
+-- Query 5
+SELECT lastname FROM customer WHERE agentID = "11";
+-- Query 6
+SELECT description FROM product WHERE description LIKE "%pad%";
+-- Query 7
+SELECT c.firstname, c.lastname, pro.description, pur.quantity FROM customer AS c
+    INNER JOIN purchase AS pur ON c.customerID = pur.customerID
+    INNER JOIN product AS pro ON pur.productID = pro.productID;
+-- Query 8
+SELECT SUM(quantity) AS "Homer's Total Purchases" FROM purchase
+    WHERE customerID IN (SELECT customerID FROM customer WHERE firstname = "Homer");
+-- Query 9
+SELECT c.firstName, c.lastName, SUM(pur.quantity) AS "Total Quantity" FROM customer AS c
+    INNER JOIN purchase AS pur ON c.customerID = pur.customerID
+    GROUP BY c.firstName, c.lastName;
+    
+-- Query 10
+SELECT description, quantity FROM product WHERE productID NOT IN (SELECT productID FROM purchase);
+-- Query 11
+SELECT pro.description, pur.quantity FROM product AS pro 
+    INNER JOIN purchase AS pur ON pur.customerID = pro.productID  
+    INNER JOIN customer AS c ON pur.customerID = c.customerID
+    WHERE c.customerID NOT IN (SELECT customerID FROM customer WHERE firstname = "Fred" AND lastname = "Flintstone");
+
+SELECT pro.description, pur.quantity FROM product AS pro
+    INNER JOIN purchase AS pur ON pro.productID = pur.productID
+    
+-- Query 12
+SELECT a.firstname AS agentfirst, a.lastname AS agentlast, c.firstname AS customerfirst, c.lastname AS customerlast FROM agent AS a
+    INNER JOIN customer AS c ON c.agentID = a.agentID
+    WHERE a.city = c.city;
+-- Query 13
+SELECT SUM(quantity) AS KneePadQuantity FROM purchase WHERE productID = 78;
+-- Query 14
+SELECT pro.description FROM product AS pro
+    INNER JOIN purchase AS pur ON pro.productID = pur.productID
+    INNER JOIN customer AS c ON pur.customerID = pur.customerID
+    WHERE sum_customer > 3 IN (SELECT COUNT(customerID) AS sum_customer FROM purchase);
